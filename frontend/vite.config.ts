@@ -45,7 +45,6 @@ export default defineConfig({
 			cookieName: 'locale',
 			strategy: ['cookie', 'preferredLanguage', 'baseLocale']
 		}),
-		devtoolsJson(),
 		Icons({
 			compiler: 'svelte',
 			autoInstall: true
