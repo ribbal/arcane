@@ -1,6 +1,11 @@
 version: 2
-multi-ecosystem-groups:
-  all-dependencies:
+updates:
+  - package-ecosystem: "npm"
+    directories:
+      - "/"
+    patterns: ["*"]
+    cooldown:
+      default-days: 2
     schedule:
       interval: "weekly"
       day: "wednesday"
@@ -15,55 +20,78 @@ multi-ecosystem-groups:
       prefix: "chore"
       include: "scope"
 
-updates:
-  - package-ecosystem: "npm"
-    directories:
-      - "/"
-    patterns: ["*"]
-    multi-ecosystem-group: "all-dependencies"
-    versioning-strategy: "increase-if-necessary"
-    ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-major"]
-    cooldown:
-      default-days: 2
-
   - package-ecosystem: "gomod"
     directory: "/"
     patterns: ["*"]
-    multi-ecosystem-group: "all-dependencies"
-    ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-major"]
     cooldown:
       default-days: 2
+    schedule:
+      interval: "weekly"
+      day: "wednesday"
+      time: "17:00"
+      timezone: "America/Chicago"
+    labels:
+      - "dependencies"
+    open-pull-requests-limit: 99
+    pull-request-branch-name:
+      separator: "-"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
 
   - package-ecosystem: "github-actions"
     directory: "/"
     patterns: ["*"]
-    multi-ecosystem-group: "all-dependencies"
-    ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-major"]
     cooldown:
       default-days: 2
+    schedule:
+      interval: "weekly"
+      day: "wednesday"
+      time: "17:00"
+      timezone: "America/Chicago"
+    labels:
+      - "dependencies"
+    open-pull-requests-limit: 99
+    pull-request-branch-name:
+      separator: "-"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
 
   - package-ecosystem: "docker"
     directory: "/docker"
     patterns: ["*"]
-    multi-ecosystem-group: "all-dependencies"
-    ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-major"]
     cooldown:
       default-days: 2
+    schedule:
+      interval: "weekly"
+      day: "wednesday"
+      time: "17:00"
+      timezone: "America/Chicago"
+    labels:
+      - "dependencies"
+    open-pull-requests-limit: 99
+    pull-request-branch-name:
+      separator: "-"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
 
   - package-ecosystem: "devcontainers"
     directory: "/"
     patterns: ["*"]
-    multi-ecosystem-group: "all-dependencies"
-    ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-major"]
     cooldown:
       default-days: 2
+    schedule:
+      interval: "weekly"
+      day: "wednesday"
+      time: "17:00"
+      timezone: "America/Chicago"
+    labels:
+      - "dependencies"
+    open-pull-requests-limit: 99
+    pull-request-branch-name:
+      separator: "-"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
