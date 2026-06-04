@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto, invalidateAll } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { formatDistanceToNow } from 'date-fns';
 	import { onDestroy } from 'svelte';
 	import { toast } from 'svelte-sonner';
@@ -512,7 +513,7 @@
 			id: `${item.environment.id}-details`,
 			action: 'inspect',
 			label: m.common_view_details(),
-			onclick: () => void goto(`/environments/${item.environment.id}`),
+			onclick: () => void goto(resolve(`/environments/${item.environment.id}`)),
 			icon: InspectIcon
 		});
 
@@ -731,13 +732,13 @@
 
 					<Card.Root
 						variant="outlined"
-						class={`overflow-hidden border transition-colors ${isCurrent ? 'border-blue-500/40 bg-blue-500/5' : 'border-border/60'}`}
+						class={`dashboard-environment-card [container-type:inline-size] overflow-hidden border transition-colors ${isCurrent ? 'border-blue-500/40 bg-blue-500/5' : 'border-border/60'}`}
 					>
 						<Card.Content class="space-y-4 p-4">
-							<div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+							<div class="grid grid-cols-[minmax(0,1fr)_auto] gap-x-3 gap-y-3">
 								<div class="min-w-0 space-y-2">
-									<div class="flex flex-wrap items-center gap-2">
-										<div class="text-base font-semibold tracking-tight">{environment.name}</div>
+									<div class="flex min-w-0 flex-wrap items-center gap-2">
+										<div class="min-w-0 max-w-full break-words text-base font-semibold tracking-tight">{environment.name}</div>
 										{#if isCurrent}
 											<StatusBadge text={m.common_current()} variant="blue" size="sm" minWidth="none" />
 										{/if}
@@ -818,12 +819,22 @@
 									</div>
 								</div>
 
-								<div class="flex min-w-0 flex-1 items-start justify-end pt-1 sm:pt-0">
+								<div class="flex min-w-0 items-start justify-end pt-1">
 									{#await environmentBoardStatePromise}
-										<ActionButtonGroup buttons={getEnvironmentActionButtons(baseItem, isCurrent)} size="sm" />
+										<ActionButtonGroup
+											buttons={getEnvironmentActionButtons(baseItem, isCurrent)}
+											size="sm"
+											inlineClass="dashboard-environment-card-action-inline"
+											menuClass="dashboard-environment-card-action-menu"
+										/>
 									{:then boardState}
 										{@const loadedItem = boardState.overviewById.get(environment.id) ?? baseItem}
-										<ActionButtonGroup buttons={getEnvironmentActionButtons(loadedItem, isCurrent)} size="sm" />
+										<ActionButtonGroup
+											buttons={getEnvironmentActionButtons(loadedItem, isCurrent)}
+											size="sm"
+											inlineClass="dashboard-environment-card-action-inline"
+											menuClass="dashboard-environment-card-action-menu"
+										/>
 									{/await}
 								</div>
 							</div>
@@ -959,3 +970,25 @@
 	onConfirm={confirmPrune}
 	onCancel={closePruneDialog}
 />
+
+<style>
+	@container (max-width: 47.999rem) {
+		:global(.dashboard-environment-card-action-inline) {
+			display: none;
+		}
+
+		:global(.dashboard-environment-card-action-menu) {
+			display: flex;
+		}
+	}
+
+	@container (min-width: 48rem) {
+		:global(.dashboard-environment-card-action-inline) {
+			display: flex;
+		}
+
+		:global(.dashboard-environment-card-action-menu) {
+			display: none;
+		}
+	}
+</style>
