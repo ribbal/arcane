@@ -21,7 +21,45 @@ updates:
       include: "scope"
 
   - package-ecosystem: "gomod"
-    directory: "/"
+    directory: "/backend"
+    patterns: ["*"]
+    cooldown:
+      default-days: 2
+    schedule:
+      interval: "weekly"
+      day: "wednesday"
+      time: "17:00"
+      timezone: "America/Chicago"
+    labels:
+      - "dependencies"
+    open-pull-requests-limit: 99
+    pull-request-branch-name:
+      separator: "-"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+
+  - package-ecosystem: "gomod"
+    directory: "/cli"
+    patterns: ["*"]
+    cooldown:
+      default-days: 2
+    schedule:
+      interval: "weekly"
+      day: "wednesday"
+      time: "17:00"
+      timezone: "America/Chicago"
+    labels:
+      - "dependencies"
+    open-pull-requests-limit: 99
+    pull-request-branch-name:
+      separator: "-"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+
+  - package-ecosystem: "gomod"
+    directory: "/types"
     patterns: ["*"]
     cooldown:
       default-days: 2
