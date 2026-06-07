@@ -67,7 +67,7 @@ RUN --mount=type=cache,target=/root/.cache/go-build \
     CGO_ENABLED=0 GOOS=linux \
     go build \
     -tags "${BUILD_TAGS}" \
-    -ldflags "-w -s -X github.com/getarcaneapp/arcane/backend/internal/config.Version=${VERSION} -X github.com/getarcaneapp/arcane/backend/internal/config.Revision=${REVISION} -X github.com/getarcaneapp/arcane/backend/internal/config.BuildTime=${BUILD_TIME} -X github.com/getarcaneapp/arcane/backend/internal/config.NodeVersion=${NODE_VERSION} -X github.com/getarcaneapp/arcane/backend/internal/config.SvelteKitVersion=${SVELTEKIT_VERSION}" \
+    -ldflags "-w -s -X github.com/getarcaneapp/arcane/backend/v2/internal/config.Version=${VERSION} -X github.com/getarcaneapp/arcane/backend/v2/internal/config.Revision=${REVISION} -X github.com/getarcaneapp/arcane/backend/v2/internal/config.BuildTime=${BUILD_TIME} -X github.com/getarcaneapp/arcane/backend/v2/internal/config.NodeVersion=${NODE_VERSION} -X github.com/getarcaneapp/arcane/backend/v2/internal/config.SvelteKitVersion=${SVELTEKIT_VERSION}" \
     -trimpath \
     -o /build/arcane \
     ./cmd/main.go
