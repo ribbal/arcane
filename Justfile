@@ -474,7 +474,15 @@ _deps-update-pnpm:
 [group('deps')]
 _deps-update-all: _deps-update-frontend _deps-update-backend _deps-update-pnpm
 
-# Deps targets. Valid: "install [frontend|tests|backend|cli|types|go|node|all]", "update [frontend|backend|pnpm|all]"
+# Dedupe all pnpm workspace dependencies
+[group('deps')]
+_deps-dedupe-node:
+    pnpm dedupe
+
+[group('deps')]
+_deps-dedupe-all: _deps-dedupe-node
+
+# Deps targets. Valid: "install [frontend|tests|backend|cli|types|go|node|all]", "update [frontend|backend|pnpm|all]", "dedupe [node|go|all]"
 [group('deps')]
 deps action="update" target="all":
     @just "_deps-{{ action }}-{{ target }}"

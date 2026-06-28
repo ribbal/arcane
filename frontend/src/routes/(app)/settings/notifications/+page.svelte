@@ -206,20 +206,18 @@
 		const matrixValid = matrixFormRef?.isValid() ?? true;
 		const genericValid = genericFormRef?.isValid() ?? true;
 
-		if (
-			!(
-				emailValid &&
-				discordValid &&
-				telegramValid &&
-				signalValid &&
-				slackValid &&
-				ntfyValid &&
-				pushoverValid &&
-				gotifyValid &&
-				matrixValid &&
-				genericValid
-			)
-		) {
+		if (!(
+			emailValid &&
+			discordValid &&
+			telegramValid &&
+			signalValid &&
+			slackValid &&
+			ntfyValid &&
+			pushoverValid &&
+			gotifyValid &&
+			matrixValid &&
+			genericValid
+		)) {
 			toast.error('Please check the form for errors');
 			return;
 		}
