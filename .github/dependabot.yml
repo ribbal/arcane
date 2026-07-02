@@ -44,6 +44,11 @@ updates:
     commit-message:
       prefix: "chore"
       include: "scope"
+    groups:
+      aws-sdk-go-v2:
+        applies-to: version-updates
+        patterns:
+          - "github.com/aws/aws-sdk-go-v2*"
 
   - package-ecosystem: "gomod"
     directory: "/cli"
