@@ -8,6 +8,7 @@ export interface APIRequestConfig {
 	params?: SearchParamsOption;
 	responseType?: 'json' | 'text' | 'blob' | 'arrayBuffer';
 	retry?: number;
+	suppressAccessDeniedToast?: boolean;
 	timeout?: number | false;
 }
 
@@ -316,7 +317,7 @@ class APIClient {
 					}
 				}
 
-				if (errorResponse.status === 403 && typeof window !== 'undefined') {
+				if (errorResponse.status === 403 && typeof window !== 'undefined' && !config.suppressAccessDeniedToast) {
 					const reason = extractServerMessage(parsed) ?? 'You do not have permission to perform this action.';
 					toast.error('Access denied', { description: reason });
 				}
