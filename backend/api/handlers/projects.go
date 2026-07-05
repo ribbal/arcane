@@ -153,8 +153,9 @@ type UpdateProjectIncludeOutput struct {
 }
 
 type RestartProjectInput struct {
-	EnvironmentID string `path:"id" doc:"Environment ID"`
-	ProjectID     string `path:"projectId" doc:"Project ID"`
+	EnvironmentID string   `path:"id" doc:"Environment ID"`
+	ProjectID     string   `path:"projectId" doc:"Project ID"`
+	Services      []string `query:"services" doc:"Service names to restart; empty restarts all services"`
 }
 
 type RestartProjectOutput struct {
@@ -1049,9 +1050,10 @@ func (h *ProjectHandler) UpdateProjectInclude(ctx context.Context, input *Update
 	}, nil
 }
 
-// RestartProject restarts all containers in a project.
+// RestartProject restarts the given services in a project (all services when none
+// are specified).
 func (h *ProjectHandler) RestartProject(ctx context.Context, input *RestartProjectInput) (*RestartProjectOutput, error) {
-	response, err := h.runProjectActivityActionResponseInternal(ctx, input.EnvironmentID, input.ProjectID, h.restartProjectActivityConfigInternal())
+	response, err := h.runProjectActivityActionResponseInternal(ctx, input.EnvironmentID, input.ProjectID, h.restartProjectActivityConfigInternal(input.Services))
 	if err != nil {
 		return nil, err
 	}
@@ -1126,7 +1128,7 @@ func (h *ProjectHandler) updateProjectServicesActivityConfigInternal(services []
 	}
 }
 
-func (h *ProjectHandler) restartProjectActivityConfigInternal() projectActivityActionConfigInternal {
+func (h *ProjectHandler) restartProjectActivityConfigInternal(services []string) projectActivityActionConfigInternal {
 	return projectActivityActionConfigInternal{
 		ActivityType:    models.ActivityTypeProjectRestart,
 		Step:            "Restarting project",
@@ -1136,7 +1138,7 @@ func (h *ProjectHandler) restartProjectActivityConfigInternal() projectActivityA
 		SuccessComplete: "Project restarted",
 		SuccessMessage:  "Project restarted successfully",
 		Action: func(runtimeCtx context.Context, projectID string, user models.User) error {
-			return h.projectService.RestartProject(runtimeCtx, projectID, user)
+			return h.projectService.RestartProject(runtimeCtx, projectID, services, user)
 		},
 		Error: projectArchivedActionErrorInternal(func(err error) error {
 			return huma.Error400BadRequest((&common.ProjectRestartError{Err: err}).Error())

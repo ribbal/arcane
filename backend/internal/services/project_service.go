@@ -2809,7 +2809,7 @@ func (s *ProjectService) buildProjectServicesInternal(ctx context.Context, proje
 	return nil
 }
 
-func (s *ProjectService) RestartProject(ctx context.Context, projectID string, user models.User) error {
+func (s *ProjectService) RestartProject(ctx context.Context, projectID string, services []string, user models.User) error {
 	proj, err := s.getMutableProjectInternal(ctx, projectID)
 	if err != nil {
 		return err
@@ -2832,7 +2832,7 @@ func (s *ProjectService) RestartProject(ctx context.Context, projectID string, u
 	}
 
 	writeProjectProgressInternal(ctx, "Restarting project services", 55, "restart")
-	if err := projects.ComposeRestart(ctx, compProj, nil); err != nil {
+	if err := projects.ComposeRestart(ctx, compProj, services); err != nil {
 		_ = s.updateProjectStatusInternal(ctx, projectID, models.ProjectStatusRunning)
 		return fmt.Errorf("failed to restart project: %w", err)
 	}
@@ -2841,6 +2841,9 @@ func (s *ProjectService) RestartProject(ctx context.Context, projectID string, u
 		"action":      "restart",
 		"projectID":   projectID,
 		"projectName": proj.Name,
+	}
+	if len(services) > 0 {
+		metadata["services"] = append([]string(nil), services...)
 	}
 	s.logProjectEventInternal(ctx, models.EventTypeProjectStart, projectID, proj.Name, user, metadata, "could not log project restart action")
 

@@ -199,9 +199,16 @@ class ProjectService extends BaseAPIService {
 		return this.handleResponse(this.api.put(`/environments/${envId}/projects/${projectId}/includes`, payload));
 	}
 
-	async restartProject(projectId: string): Promise<void> {
+	async restartProject(projectId: string, services?: string[]): Promise<unknown> {
 		const envId = await environmentStore.getCurrentEnvironmentId();
-		await this.handleResponse(this.api.post(`/environments/${envId}/projects/${projectId}/restart`));
+		let params: URLSearchParams | undefined;
+		if (services && services.length > 0) {
+			params = new URLSearchParams();
+			for (const service of services) {
+				params.append('services', service);
+			}
+		}
+		return this.handleResponse(this.api.post(`/environments/${envId}/projects/${projectId}/restart`, undefined, { params }));
 	}
 
 	async archiveProject(projectId: string): Promise<void> {
